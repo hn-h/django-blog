@@ -1,0 +1,10 @@
+{%extends 'blogApp/base.html'%}
+{%block content%}
+{%for post in object_list%}
+  <div class='draftslist'>
+    <p>Created by: {{post.author}} On: {{post.creation_date}}</p>
+    <h2><a href="{%url 'post_detail' pk=post.pk%}">{{post.title}}</a></h2>
+    <p>{{post.text|safe|truncatechars:100}}</p>
+  </div>
+{%endfor%}
+{%endblock%}
