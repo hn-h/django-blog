@@ -3,7 +3,7 @@
 {%block content%}
 <div class='jumbotron'>
 	<h2>Please Login:</h2>
-	<h3>(Must be SuperUser, please check with admin)</h3>
+	<h3>If you have no user, please <a href={%url 'signup' %}>signup</a></h3>
 
 	{% if form.errors %}
 		<p>Your username and password didn't match. Please try again.</p>

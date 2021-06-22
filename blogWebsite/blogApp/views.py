@@ -10,9 +10,11 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.utils import timezone
 from blogApp.models import Post, Comment
 from blogApp.forms import PostForm, CommentForm
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth import login, authenticate
 
 class AboutView(TemplateView):
-	template_name='about.html'
+	template_name='blogApp/about.html'
 
 
 class PostListView(ListView):
@@ -67,7 +69,7 @@ def add_comment_to_post(request,pk):
 
 	else:
 		form=CommentForm()
-	return render(request,'blog/comment_form.html',{'form':form})
+	return render(request,'blogApp/comment_form.html',{'form':form})
 
 @login_required
 def comment_approve(request,pk):
@@ -87,3 +89,17 @@ def post_publish(request,pk):
 	post = get_object_or_404(Post,pk=pk)
 	post.publish()
 	return redirect('post_detail', pk=pk)
+
+def signup(request):
+	if request.method=="POST":
+		form = UserCreationForm(request.POST)
+		if form.is_valid():
+			form.save()
+			username = form.cleaned_data.get('username')
+			password = form.cleaned_data.get('password1')
+			user = authenticate(username=username, password=password)
+			login(request, user)
+			return redirect('post_list')
+	else:
+		form = UserCreationForm()
+	return render(request, 'registration/signup.html', {'form': form})
